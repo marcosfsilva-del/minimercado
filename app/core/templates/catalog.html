@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>Catalogo</h2>
+    <p>Produtos iniciais para as features da turma evoluirem.</p>
+  </div>
+  <div class="toolbar">
+    {% for slot in slot_renderers("PRODUCT_LIST_TOOLBAR") %}
+      {{ slot.renderer(products=products)|safe }}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="product-grid">
+  {% for product in products %}
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.description }}</p>
+        </div>
+        {% if product.promotional %}
+          <span class="badge">Promo</span>
+        {% endif %}
+      </div>
+      <p class="price">{{ product.price|brl }}</p>
+      <p class="muted">Categoria: {{ product.category }} | Estoque: {{ product.stock }}</p>
+      {% for slot in slot_renderers("PRODUCT_CARD") %}
+        {{ slot.renderer(product=product)|safe }}
+      {% endfor %}
+      <form method="post" action="{{ url_for('web.add_to_cart', product_id=product.id) }}">
+        <button type="submit" {% if product.stock <= 0 %}disabled{% endif %}>Adicionar ao carrinho</button>
+      </form>
+    </article>
+  {% endfor %}
+</section>
+{% endblock %}

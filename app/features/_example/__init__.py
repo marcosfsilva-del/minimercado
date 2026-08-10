@@ -1,0 +1,1 @@
+"""Feature didatica de exemplo."""

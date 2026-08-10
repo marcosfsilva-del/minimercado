@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>Carrinho</h2>
+    <p>Altere quantidades ou remova produtos antes do checkout.</p>
+  </div>
+</section>
+
+{% if not items %}
+  <article class="panel">
+    <p>Seu carrinho esta vazio.</p>
+    <a class="button-link" href="{{ url_for('web.catalog') }}">Ver catalogo</a>
+  </article>
+{% else %}
+  <section class="cart-layout">
+    <div class="stack">
+      {% for item in items %}
+        <article class="cart-item">
+          <div>
+            <h3>{{ item.product.name }}</h3>
+            <p class="muted">{{ item.product.price|brl }} cada</p>
+            {% for slot in slot_renderers("CART_ITEM") %}
+              {{ slot.renderer(item=item)|safe }}
+            {% endfor %}
+          </div>
+          <div class="quantity-row">
+            <form method="post" action="{{ url_for('web.update_cart', product_id=item.product.id) }}">
+              <input type="number" name="quantity" min="1" max="{{ item.product.stock }}" value="{{ item.quantity }}">
+              <button type="submit">Atualizar</button>
+            </form>
+            <form method="post" action="{{ url_for('web.remove_from_cart', product_id=item.product.id) }}">
+              <button class="secondary" type="submit">Remover</button>
+            </form>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    <aside class="summary">
+      <h3>Resumo</h3>
+      <p class="total">{{ total|brl }}</p>
+      {% for slot in slot_renderers("CART_SUMMARY") %}
+        {{ slot.renderer(items=items, total=total)|safe }}
+      {% endfor %}
+      <a class="button-link full" href="{{ url_for('web.checkout') }}">Finalizar compra</a>
+    </aside>
+  </section>
+{% endif %}
+{% endblock %}

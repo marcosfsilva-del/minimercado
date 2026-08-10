@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>Checkout</h2>
+    <p>Compra simulada com persistencia do pedido.</p>
+  </div>
+</section>
+
+<article class="panel narrow">
+  <form method="post" action="{{ url_for('web.finish_checkout') }}" class="stack">
+    <label>
+      Nome do cliente
+      <input type="text" name="customer_name" placeholder="Opcional">
+    </label>
+    <div class="summary-line">
+      <span>Itens</span>
+      <strong>{{ items|length }}</strong>
+    </div>
+    <div class="summary-line">
+      <span>Total</span>
+      <strong>{{ total|brl }}</strong>
+    </div>
+    {% for slot in slot_renderers("CHECKOUT_FORM") %}
+      {{ slot.renderer(items=items, total=total)|safe }}
+    {% endfor %}
+    <button type="submit" {% if not items %}disabled{% endif %}>Gerar pedido</button>
+  </form>
+</article>
+{% endblock %}
