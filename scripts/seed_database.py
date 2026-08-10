@@ -33,7 +33,7 @@ def main() -> None:
             product.stock = stock
             product.promotional = promotional
 
-    print("Seed concluido.")
+    print("Seed concluído.")
 
 
 if __name__ == "__main__":

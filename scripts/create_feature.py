@@ -19,7 +19,7 @@ def main() -> None:
     py_name = slug.replace("-", "_")
     feature_dir = Path("app/features") / py_name
     if feature_dir.exists():
-        print(f"A feature '{slug}' ja existe.")
+        print(f"A feature '{slug}' já existe.")
         sys.exit(1)
 
     feature_dir.mkdir(parents=True)

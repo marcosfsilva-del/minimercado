@@ -9,7 +9,7 @@ CHECKS = [
     ("frontend", "/"),
     ("backend", "/api"),
     ("health", "/api/health"),
-    ("catalogo", "/api/products"),
+    ("catálogo", "/api/products"),
 ]
 
 
