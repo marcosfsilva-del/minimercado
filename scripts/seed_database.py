@@ -3,11 +3,11 @@ from app.core.models import Product
 
 PRODUCTS = [
     ("Arroz", "Pacote de arroz branco 5kg", "Mercearia", 24.90, 30, True),
-    ("Feijao", "Feijao carioca 1kg", "Mercearia", 8.49, 40, False),
-    ("Cafe", "Cafe torrado e moido 500g", "Bebidas", 15.90, 25, True),
-    ("Leite", "Leite integral 1L", "Laticinios", 4.79, 60, False),
-    ("Acucar", "Acucar refinado 1kg", "Mercearia", 5.29, 35, False),
-    ("Macarrao", "Macarrao espaguete 500g", "Massas", 3.99, 50, False),
+    ("Feijão", "Feijão carioca 1kg", "Mercearia", 8.49, 40, False),
+    ("Café", "Café torrado e moído 500g", "Bebidas", 15.90, 25, True),
+    ("Leite", "Leite integral 1L", "Laticínios", 4.79, 60, False),
+    ("Açúcar", "Açúcar refinado 1kg", "Mercearia", 5.29, 35, False),
+    ("Macarrão", "Macarrão espaguete 500g", "Massas", 3.99, 50, False),
     ("Sabonete", "Sabonete perfumado 90g", "Higiene", 2.49, 80, True),
     ("Detergente", "Detergente neutro 500ml", "Limpeza", 2.19, 70, False),
     ("Refrigerante", "Refrigerante cola 2L", "Bebidas", 8.99, 22, True),
