@@ -19,6 +19,6 @@ Closes #
 - [ ] lint
 - [ ] testes
 - [ ] build
-- [ ] documentacao
+- [ ] documentação
 - [ ] smoke test
-- [ ] CI propria da branch executou com sucesso
+- [ ] CI própria da branch executou com sucesso

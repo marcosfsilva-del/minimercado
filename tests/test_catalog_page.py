@@ -8,4 +8,4 @@ def test_catalog_page_renders():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert b"Catalogo" in response.data
+    assert "Catálogo".encode() in response.data

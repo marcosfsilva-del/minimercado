@@ -1,10 +1,10 @@
 # DevOps Market Python
 
-Mini mercado web para a disciplina de Integracao DevOps, feito em Python para facilitar execucao em laboratorio.
+Mini mercado web para a disciplina de Integração DevOps, feito em Python para facilitar execução em laboratório.
 
-O frontend usa Flask + Jinja. O backend usa Flask API. O banco e SQLite com SQLAlchemy.
+O frontend usa Flask + Jinja. O backend usa Flask API. O banco é SQLite com SQLAlchemy.
 
-## Primeira execucao
+## Primeira execução
 
 ```bash
 python3 -m venv .venv
@@ -27,7 +27,7 @@ python3 tasks.py docker-build
 python3 tasks.py smoke
 ```
 
-O comando `build` em Python faz uma construcao/validacao com `compileall`, garantindo que o codigo importa e compila para bytecode. O Dockerfile tambem tem um stage `builder`.
+O comando `build` em Python faz uma construção/validação com `compileall`, garantindo que o código importa e compila para bytecode. O Dockerfile também tem um stage `builder`.
 
 ## Docker
 
@@ -62,8 +62,8 @@ app/features/product_search/
 
 ## Core protegido
 
-Nao altere `app/core/*` para implementar uma feature comum. O aluno deve trabalhar em `app/features/<slug>`.
+Não altere `app/core/*` para implementar uma feature comum. O aluno deve trabalhar em `app/features/<slug>`.
 
 ## CI
 
-Este esqueleto nao entrega workflow pronto. Cada aluno cria sua propria pipeline na branch, em `.github/workflows/<nome-do-aluno-ou-feature>.yml`, usando os comandos base acima.
+Este esqueleto não entrega workflow pronto. Cada aluno cria sua própria pipeline na branch, em `.github/workflows/<nome-do-aluno-ou-feature>.yml`, usando os comandos base acima.

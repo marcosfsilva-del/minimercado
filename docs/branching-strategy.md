@@ -1,4 +1,4 @@
-# Estrategia De Branching
+# Estratégia De Branching
 
 ```text
 main
@@ -14,4 +14,4 @@ Exemplo:
 feature/42-product-search
 ```
 
-Nao desenvolver direto na `main`.
+Não desenvolver direto na `main`.

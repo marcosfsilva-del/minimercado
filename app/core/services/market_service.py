@@ -32,7 +32,7 @@ def create_order(
         quantity = item["quantity"]
 
         if product is None:
-            raise ValueError(f"Produto nao encontrado: {item['product_id']}")
+            raise ValueError(f"Produto não encontrado: {item['product_id']}")
         if quantity < 1:
             raise ValueError("Quantidade deve ser maior que zero.")
         if quantity > product.stock:

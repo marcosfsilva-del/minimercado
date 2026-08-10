@@ -6,7 +6,7 @@ Descreva a funcionalidade.
 
 Explique o comportamento esperado.
 
-## Criterios de aceitacao
+## Critérios de aceitação
 
 - [ ] ...
 - [ ] ...
@@ -18,4 +18,4 @@ Explique o comportamento esperado.
 - [ ] Backend Flask/API
 - [ ] Banco
 - [ ] Testes
-- [ ] Operacao
+- [ ] Operação

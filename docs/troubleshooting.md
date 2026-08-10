@@ -21,11 +21,11 @@ python3 -m pip install -r requirements-dev.txt
 python3 tasks.py db-seed
 ```
 
-## Feature nao apareceu
+## Feature não apareceu
 
 Confira se existe `app/features/<slug>/manifest.py` exportando `manifest`.
 
-## Docker nao sobe
+## Docker não sobe
 
 ```bash
 docker compose up --build

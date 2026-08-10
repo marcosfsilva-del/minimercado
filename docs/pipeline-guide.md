@@ -1,6 +1,6 @@
 # Guia De Pipeline
 
-O projeto entrega comandos, testes e Docker. Nao entrega CI pronta.
+O projeto entrega comandos, testes e Docker. Não entrega CI pronta.
 
 Requisitos minimos da pipeline do aluno:
 
