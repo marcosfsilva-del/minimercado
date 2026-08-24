@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: devops-market-python:latest
+    container_name: devops-market
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      DATABASE_URL: "sqlite:///data/devops_market.db"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
