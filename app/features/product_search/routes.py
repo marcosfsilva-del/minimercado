@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, render_template
 from app.features.product_search.service import status
 
 bp = Blueprint(
-    "product_search"
+    "product_search",
      __name__,
      url_prefix="/product-search",
      template_folder="templates"
