@@ -38,4 +38,4 @@ jobs:
         run: python -m pip install -r requirements-dev.txt
         
       - name: Testes com Pytest
-        run: python -m pytest
+        run: python -m pytest 
