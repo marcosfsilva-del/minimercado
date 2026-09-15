@@ -5,6 +5,9 @@ manifest = FeatureManifest(
     id="bloquear-estoque-negativo",
     name="Bloquear Estoque Negativo",
     blueprint=bp,
-    menu=MenuItem(label="Bloquear Estoque Negativo", endpoint="bloquear_estoque_negativo.page", order=50),
+    menu=MenuItem(
+    label="Bloquear Estoque Negativo",
+    endpoint="bloquear_estoque_negativo.page",
+    order=50,),
     slots=[],
 )
