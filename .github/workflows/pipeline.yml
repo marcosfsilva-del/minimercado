@@ -40,7 +40,7 @@ jobs:
           python-version: "3.12"
  
       - name: Instalar dependências
-        run: python -m pip install -r requirements.txt
+        run: python -m pip install -r requirements-dev.txt
  
       - name: Testes com Pytest
         run: python -m pytest -v
@@ -61,7 +61,7 @@ jobs:
           python-version: "3.12"
  
       - name: Instalar dependências
-        run: python -m pip install -r requirements.txt
+        run: python -m pip install -r requirements-dev.txt
  
       - name: Build com compileall
         run: python -m compileall -q app scripts
