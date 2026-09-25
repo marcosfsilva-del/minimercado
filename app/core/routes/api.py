@@ -4,8 +4,10 @@ from app.core.config import settings
 from app.core.database import session_scope
 from app.core.services.market_service import (
     create_order,
+    list_inventory_movements,
     list_orders,
     list_products,
+    movement_to_dict,
     order_to_dict,
     product_to_dict,
 )
@@ -52,3 +54,12 @@ def create_order_api():
     with session_scope() as db:
         order = create_order(db, items, data.get("customerName"))
         return jsonify(order_to_dict(order)), 201
+
+
+@api_bp.get("/inventory/movements")
+def inventory_movements():
+    """Lista todas as movimentações de estoque ordenadas da mais recente para a mais antiga."""
+    with session_scope() as db:
+        return jsonify(
+            [movement_to_dict(m) for m in list_inventory_movements(db)]
+        )

@@ -15,7 +15,6 @@ import pytest
 from app.core.models import InventoryMovement, Product
 from app.core.services.market_service import list_inventory_movements, movement_to_dict
 
-
 # ---------------------------------------------------------------------------
 # Helpers — objetos em memória (sem banco de dados)
 # ---------------------------------------------------------------------------

@@ -12,6 +12,15 @@ def list_orders(session: Session) -> list[Order]:
     return list(session.scalars(select(Order).order_by(Order.created_at.desc())))
 
 
+def list_inventory_movements(session: Session) -> list[InventoryMovement]:
+    """Retorna todas as movimentações de estoque ordenadas da mais recente para a mais antiga."""
+    return list(
+        session.scalars(
+            select(InventoryMovement).order_by(InventoryMovement.created_at.desc())
+        ).all()
+    )
+
+
 def create_order(
     session: Session,
     items: list[dict[str, int]],
@@ -92,4 +101,19 @@ def order_to_dict(order: Order) -> dict[str, object]:
             }
             for item in order.items
         ],
+    }
+
+
+def movement_to_dict(movement: InventoryMovement) -> dict[str, object]:
+    """Serializa uma InventoryMovement para dicionário JSON-compatível."""
+    return {
+        "id": movement.id,
+        "productId": movement.product_id,
+        "type": movement.type,
+        "quantity": movement.quantity,
+        "createdAt": movement.created_at.isoformat(),
+        "product": {
+            "id": movement.product.id,
+            "name": movement.product.name,
+        },
     }
