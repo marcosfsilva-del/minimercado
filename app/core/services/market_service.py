@@ -16,6 +16,7 @@ def create_order(
     session: Session,
     items: list[dict[str, int]],
     customer_name: str | None = None,
+    cpf: str | None = None,
 ) -> Order:
     if not items:
         raise ValueError("Pedido precisa ter pelo menos um item.")
@@ -49,7 +50,12 @@ def create_order(
             )
         )
 
-    order = Order(customer_name=customer_name or None, total=total, items=order_items)
+    order = Order(
+        customer_name=customer_name or None,
+        cpf=cpf or None,
+        total=total,
+        items=order_items,
+    )
     session.add(order)
 
     for item in items:

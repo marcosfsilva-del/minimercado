@@ -82,14 +82,19 @@ def finish_checkout():
         products = list_products(db)
         items = _cart_items(products)
         payload = [
-            {"product_id": item["product"].id, "quantity": item["quantity"]} for item in items
+            {"product_id": item["product"].id, "quantity": item["quantity"]}
+            for item in items
         ]
-        create_order(db, payload, request.form.get("customer_name"))
-
-    session["cart"] = {}
-    flash("Pedido criado com sucesso.")
-    return redirect(url_for("web.orders"))
-
+        create_order(
+            db,
+            payload,
+            request.form.get("customer_name"),
+            request.form.get("cpf"),
+        )
+        session["cart"] = {}
+        flash("Pedido criado com sucesso.")
+        return redirect(url_for("web.orders"))
+    
 
 @web_bp.get("/orders")
 def orders():

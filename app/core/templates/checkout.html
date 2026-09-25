@@ -14,18 +14,37 @@
       Nome do cliente
       <input type="text" name="customer_name" placeholder="Opcional">
     </label>
+
+    <label>
+      CPF
+      <input
+        type="text"
+        name="cpf"
+        id="cpf"
+        placeholder="000.000.000-00"
+        maxlength="14"
+        inputmode="numeric"
+        autocomplete="off"
+      >
+    </label>
+
     <div class="summary-line">
       <span>Itens</span>
       <strong>{{ items|length }}</strong>
     </div>
+
     <div class="summary-line">
       <span>Total</span>
       <strong>{{ total|brl }}</strong>
     </div>
+
     {% for slot in slot_renderers("CHECKOUT_FORM") %}
       {{ slot.renderer(items=items, total=total)|safe }}
     {% endfor %}
+
     <button type="submit" {% if not items %}disabled{% endif %}>Gerar pedido</button>
   </form>
 </article>
+
+<script src="{{ url_for('static', filename='checkout.js') }}"></script>
 {% endblock %}
