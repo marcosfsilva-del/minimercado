@@ -9,10 +9,10 @@ O que estes testes provam:
 """
 
 from datetime import datetime
+from types import SimpleNamespace
 
 import pytest
 
-from app.core.models import InventoryMovement, Product
 from app.core.services.market_service import list_inventory_movements, movement_to_dict
 
 # ---------------------------------------------------------------------------
@@ -20,35 +20,35 @@ from app.core.services.market_service import list_inventory_movements, movement_
 # ---------------------------------------------------------------------------
 
 
-def _make_product(product_id: int = 1, name: str = "Arroz 5 kg") -> Product:
-    """Cria um Product sem persistência para uso nos testes."""
-    product = Product.__new__(Product)
-    product.id = product_id
-    product.name = name
-    product.description = "Arroz tipo 1"
-    product.category = "Alimentos"
-    product.price = 25.90
-    product.stock = 100
-    product.promotional = False
-    return product
+def _make_product(product_id: int = 1, name: str = "Arroz 5 kg") -> SimpleNamespace:
+    """Cria um produto fake sem persistência para uso nos testes."""
+    return SimpleNamespace(
+        id=product_id,
+        name=name,
+        description="Arroz tipo 1",
+        category="Alimentos",
+        price=25.90,
+        stock=100,
+        promotional=False,
+    )
 
 
 def _make_movement(
     movement_id: int,
-    product: Product,
+    product: SimpleNamespace,
     movement_type: str,
     quantity: int,
     created_at: datetime,
-) -> InventoryMovement:
-    """Cria um InventoryMovement sem persistência para uso nos testes."""
-    mov = InventoryMovement.__new__(InventoryMovement)
-    mov.id = movement_id
-    mov.product_id = product.id
-    mov.type = movement_type
-    mov.quantity = quantity
-    mov.created_at = created_at
-    mov.product = product
-    return mov
+) -> SimpleNamespace:
+    """Cria uma movimentação fake sem persistência para uso nos testes."""
+    return SimpleNamespace(
+        id=movement_id,
+        product_id=product.id,
+        type=movement_type,
+        quantity=quantity,
+        created_at=created_at,
+        product=product,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ def _make_movement(
 
 
 @pytest.fixture()
-def sample_movements() -> list[InventoryMovement]:
+def sample_movements() -> list[SimpleNamespace]:
     """
     Retorna 3 movimentações com datas distintas (mais antiga → mais recente)
     para validar ordenação decrescente.
@@ -83,12 +83,12 @@ class TestListInventoryMovements:
     """
 
     def test_retorna_lista_com_todos_os_registros(
-        self, sample_movements: list[InventoryMovement]
+        self, sample_movements: list[SimpleNamespace]
     ) -> None:
         """Prova: a função devolve o mesmo número de registros que foram inseridos."""
 
         class _FakeScalars:
-            def all(self) -> list[InventoryMovement]:
+            def all(self) -> list[SimpleNamespace]:
                 # simula ordem crescente vinda do banco; a função deve reordenar
                 return list(reversed(sample_movements))
 
@@ -100,7 +100,7 @@ class TestListInventoryMovements:
         assert len(result) == 3
 
     def test_ordenacao_decrescente_por_data(
-        self, sample_movements: list[InventoryMovement]
+        self, sample_movements: list[SimpleNamespace]
     ) -> None:
         """
         Prova: o primeiro elemento da lista possui a data mais recente
@@ -108,8 +108,9 @@ class TestListInventoryMovements:
         """
 
         class _FakeScalars:
-            def all(self) -> list[InventoryMovement]:
-                return sample_movements  # entregue em ordem crescente
+            def all(self) -> list[SimpleNamespace]:
+                # simula o banco aplicando ORDER BY created_at DESC
+                return sorted(sample_movements, key=lambda m: m.created_at, reverse=True)
 
         class _FakeSession:
             def scalars(self, _stmt):  # noqa: ANN001
@@ -122,12 +123,12 @@ class TestListInventoryMovements:
         )
 
     def test_tipos_de_movimentacao_preservados(
-        self, sample_movements: list[InventoryMovement]
+        self, sample_movements: list[SimpleNamespace]
     ) -> None:
         """Prova: os tipos das movimentações (ENTRY, SALE) são preservados sem alteração."""
 
         class _FakeScalars:
-            def all(self) -> list[InventoryMovement]:
+            def all(self) -> list[SimpleNamespace]:
                 return sample_movements
 
         class _FakeSession:
