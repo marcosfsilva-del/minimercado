@@ -76,3 +76,50 @@ def test_api_lista_somente_promocionais(dados, client):
 
 def test_api_devolve_lista_vazia_sem_promocionais(sem_promocoes, client):
     assert client.get("/promocoes/api").get_json() == []
+
+
+def test_promocao_criada_depois_aparece_na_pagina(dados, criar_promocao, client):
+    criar_promocao("Biscoito Promo")
+
+    response = client.get("/promocoes")
+
+    assert b"Biscoito Promo" in response.data
+    assert response.text.count("Adicionar ao carrinho") == len(dados.promocionais) + 1
+
+
+def test_promocao_criada_depois_aparece_na_api(dados, criar_promocao, client):
+    criar_promocao("Biscoito Promo")
+
+    payload = client.get("/promocoes/api").get_json()
+
+    assert len(payload) == len(dados.promocionais) + 1
+    assert "Biscoito Promo" in [item["name"] for item in payload]
+    assert all(item["promotional"] is True for item in payload)
+
+
+def test_promocao_criada_depois_entra_na_ordem_alfabetica(
+    criar_promocao, session
+):
+    criar_promocao("Biscoito Promo")
+
+    nomes = [produto.name for produto in list_promotional_products(session)]
+
+    assert nomes == ["Arroz Promo", "Biscoito Promo", "Cafe Promo"]
+
+
+def test_promocao_desativada_some_da_pagina(dados, desativar_promocao, client):
+    desativar_promocao("Arroz Promo")
+
+    response = client.get("/promocoes")
+
+    assert b"Arroz Promo" not in response.data
+    assert b"Cafe Promo" in response.data
+    assert response.text.count("Adicionar ao carrinho") == len(dados.promocionais) - 1
+
+
+def test_promocao_desativada_continua_no_catalogo(dados, desativar_promocao, client):
+    desativar_promocao("Arroz Promo")
+
+    response = client.get("/")
+
+    assert b"Arroz Promo" in response.data

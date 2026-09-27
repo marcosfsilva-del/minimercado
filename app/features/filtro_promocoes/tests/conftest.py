@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 
 import pytest
-from sqlalchemy import create_engine, delete
+from sqlalchemy import create_engine, delete, select
 from sqlalchemy.orm import sessionmaker
 
 from app.core import create_app
@@ -71,3 +71,28 @@ def sem_promocoes(app, session_factory):
     with session_factory() as open_session:
         open_session.execute(delete(Product).where(Product.promotional.is_(True)))
         open_session.commit()
+
+
+@pytest.fixture()
+def criar_promocao(session_factory):
+    """Insere uma promocao no catalogo depois do app ja estar montado."""
+
+    def _criar_promocao(nome: str) -> None:
+        with session_factory() as open_session:
+            open_session.add(criar_produto(nome, True))
+            open_session.commit()
+
+    return _criar_promocao
+
+
+@pytest.fixture()
+def desativar_promocao(session_factory):
+    """Desliga a promocao de um produto existente, sem remove-lo do catalogo."""
+
+    def _desativar(nome: str) -> None:
+        with session_factory() as open_session:
+            produto = open_session.scalar(select(Product).where(Product.name == nome))
+            produto.promotional = False
+            open_session.commit()
+
+    return _desativar
