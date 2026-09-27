@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>Promoções</h2>
+    <p>Apenas produtos promocionais do catálogo.</p>
+  </div>
+  <div class="toolbar">
+    <a class="button-link" id="voltar-catalogo" href="{{ url_for('web.catalog') }}">
+      Voltar ao catálogo
+    </a>
+  </div>
+</section>
+
+<section class="product-grid" id="lista-promocoes">
+  {% for product in products %}
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.description }}</p>
+        </div>
+        <span class="badge">Promo</span>
+      </div>
+      <p class="price">{{ product.price|brl }}</p>
+      <p class="muted">Categoria: {{ product.category }} | Estoque: {{ product.stock }}</p>
+      <form method="post" action="{{ url_for('web.add_to_cart', product_id=product.id) }}">
+        <button type="submit" {% if product.stock <= 0 %}disabled{% endif %}>Adicionar ao carrinho</button>
+      </form>
+    </article>
+  {% else %}
+    <p class="muted">Nenhum produto promocional no momento.</p>
+  {% endfor %}
+</section>
+{% endblock %}
