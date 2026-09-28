@@ -1,10 +1,18 @@
-from app.core.types.features import FeatureManifest, MenuItem
-from app.features.contador_no_menu.routes import bp
+from flask import session
+
+from app.core.types.features import FeatureManifest, SlotContribution
+from app.features.contador_no_menu.service import total_items
+
+
+def render_counter() -> str:
+    total = total_items(session.get("cart", {}))
+    if total == 0:
+        return ""
+    return f'<span class="cart-counter">{total}</span>'
+
 
 manifest = FeatureManifest(
     id="contador-no-menu",
     name="Contador No Menu",
-    blueprint=bp,
-    menu=MenuItem(label="Contador No Menu", endpoint="contador_no_menu.page", order=50),
-    slots=[],
+    slots=[SlotContribution(slot="MAIN_MENU", renderer=render_counter)],
 )
