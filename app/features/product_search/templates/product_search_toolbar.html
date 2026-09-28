@@ -1,0 +1,33 @@
+<div class="product-search-toolbar">
+  <input
+    type="search"
+    id="product-search-input"
+    name="search"
+    placeholder="Buscar produto por nome..."
+    autocomplete="off"
+    aria-label="Buscar produtos pelo nome"
+    style="min-width: 250px;"
+  />
+</div>
+<script>
+  (function () {
+    const input = document.getElementById("product-search-input");
+    if (!input) return;
+
+    input.addEventListener("input", function () {
+      const term = this.value.trim().toLowerCase();
+      const cards = document.querySelectorAll(".product-grid .card");
+
+      cards.forEach(function (card) {
+        const titleEl = card.querySelector(".card-head h3");
+        const title = titleEl ? titleEl.textContent.trim().toLowerCase() : "";
+
+        if (!term || title.includes(term)) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  })();
+</script>
