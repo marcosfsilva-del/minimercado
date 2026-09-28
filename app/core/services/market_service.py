@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.models import InventoryMovement, Order, OrderItem, Product
 
@@ -9,7 +9,12 @@ def list_products(session: Session) -> list[Product]:
 
 
 def list_orders(session: Session) -> list[Order]:
-    return list(session.scalars(select(Order).order_by(Order.created_at.desc())))
+    query = (
+        select(Order)
+        .options(selectinload(Order.items).selectinload(OrderItem.product))
+        .order_by(Order.created_at.desc())
+    )
+    return list(session.scalars(query))
 
 
 def create_order(
