@@ -20,9 +20,7 @@ def index():
 
 @api_bp.get("/health")
 def health():
-    return jsonify(
-        {"status": "ok", "version": settings.app_version, "commit": settings.commit_sha}
-    )
+    return jsonify({"status": "ok", "version": settings.app_version, "commit": settings.commit_sha})
 
 
 @api_bp.get("/ready")

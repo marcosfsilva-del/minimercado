@@ -29,13 +29,13 @@ def main() -> None:
 
     (feature_dir / "__init__.py").write_text('"""Feature gerada."""\n', encoding="utf-8")
     (feature_dir / "service.py").write_text(
-        f'''def status() -> dict[str, str]:
+        f"""def status() -> dict[str, str]:
     return {{"feature": "{slug}", "status": "ok"}}
-''',
+""",
         encoding="utf-8",
     )
     (feature_dir / "routes.py").write_text(
-        f'''from flask import Blueprint, jsonify, render_template
+        f"""from flask import Blueprint, jsonify, render_template
 
 from app.features.{py_name}.service import status
 
@@ -50,11 +50,11 @@ def page():
 @bp.get("/api")
 def api():
     return jsonify(status())
-''',
+""",
         encoding="utf-8",
     )
     (feature_dir / "manifest.py").write_text(
-        f'''from app.core.types.features import FeatureManifest, MenuItem
+        f"""from app.core.types.features import FeatureManifest, MenuItem
 from app.features.{py_name}.routes import bp
 
 manifest = FeatureManifest(
@@ -64,11 +64,11 @@ manifest = FeatureManifest(
     menu=MenuItem(label="{title}", endpoint="{py_name}.page", order=50),
     slots=[],
 )
-''',
+""",
         encoding="utf-8",
     )
     (feature_dir / "templates" / f"{slug}.html").write_text(
-        f'''{{% extends "base.html" %}}
+        f"""{{% extends "base.html" %}}
 
 {{% block content %}}
 <section class="page-title">
@@ -78,16 +78,16 @@ manifest = FeatureManifest(
   </div>
 </section>
 {{% endblock %}}
-''',
+""",
         encoding="utf-8",
     )
     (feature_dir / "tests" / f"test_{py_name}.py").write_text(
-        f'''from app.features.{py_name}.service import status
+        f"""from app.features.{py_name}.service import status
 
 
 def test_status():
     assert status() == {{"feature": "{slug}", "status": "ok"}}
-''',
+""",
         encoding="utf-8",
     )
     (feature_dir / "README.md").write_text(f"# {title}\n\nDescreva a feature.\n", encoding="utf-8")
