@@ -17,4 +17,12 @@
   <p><a href="/cart">Voltar ao carrinho</a></p>
 </article>
 {% endif %}
+<article class="panel">
+  <h3>Cupons disponíveis</h3>
+  <ul>
+    {% for code, rate in coupons.items() %}
+    <li><strong>{{ code }}</strong>: {{ "%.0f"|format(rate * 100) }}% de desconto no total da compra</li>
+    {% endfor %}
+  </ul>
+</article>
 {% endblock %}
