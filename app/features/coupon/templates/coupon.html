@@ -10,6 +10,10 @@
 {% if result %}
 <article class="panel">
   <p>{{ result.message }}</p>
+  {% if result.valid %}
+  <p>Desconto: R$ {{ "%.2f"|format(result.discount)|replace(".", ",") }}</p>
+  {% endif %}
+  <p>Total final: R$ {{ "%.2f"|format(result.total)|replace(".", ",") }}</p>
   <p><a href="/cart">Voltar ao carrinho</a></p>
 </article>
 {% endif %}
