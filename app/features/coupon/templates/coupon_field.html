@@ -1,0 +1,6 @@
+<form method="post" action="{{ url_for('coupon.apply') }}" class="coupon-form">
+  <label for="coupon-code">Cupom</label>
+  <input id="coupon-code" name="code" type="text" placeholder="Digite seu cupom">
+  <input type="hidden" name="total" value="{{ total }}">
+  <button type="submit">Aplicar</button>
+</form>

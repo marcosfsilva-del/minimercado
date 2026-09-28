@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <h2>Cupom</h2>
+  </div>
+</section>
+
+{% if result %}
+<article class="panel">
+  <p>{{ result.message }}</p>
+  <p><a href="/cart">Voltar ao carrinho</a></p>
+</article>
+{% endif %}
+{% endblock %}
