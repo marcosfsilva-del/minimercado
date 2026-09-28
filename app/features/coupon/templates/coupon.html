@@ -4,17 +4,25 @@
 <section class="page-title">
   <div>
     <h2>Cupom</h2>
+    <p>Teste um código de cupom e veja o desconto aplicado.</p>
   </div>
 </section>
 
-{% if result %}
 <article class="panel">
-  <p>{{ result.message }}</p>
-  {% if result.valid %}
-  <p>Desconto: R$ {{ "%.2f"|format(result.discount)|replace(".", ",") }}</p>
+  <form method="post" action="{{ url_for('coupon.apply') }}">
+    <label for="coupon-code">Código do cupom</label>
+    <input id="coupon-code" name="code" type="text" placeholder="Ex: DEVOPS10" value="{{ result.code if result else '' }}">
+    <input type="hidden" name="total" value="100">
+    <button type="submit">Aplicar</button>
+  </form>
+
+  {% if result %}
+    <p>{{ result.message }}</p>
+    {% if result.valid %}
+      <p>Desconto: R$ {{ "%.2f"|format(result.discount)|replace(".", ",") }}</p>
+      <p>Total final: R$ {{ "%.2f"|format(result.total)|replace(".", ",") }}</p>
+    {% endif %}
+    <p><a href="/cart">Voltar ao carrinho</a></p>
   {% endif %}
-  <p>Total final: R$ {{ "%.2f"|format(result.total)|replace(".", ",") }}</p>
-  <p><a href="/cart">Voltar ao carrinho</a></p>
 </article>
-{% endif %}
 {% endblock %}
