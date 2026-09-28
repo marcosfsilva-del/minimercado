@@ -10,8 +10,8 @@ def cart_summary_field(**context) -> str:
 
 manifest = FeatureManifest(
     id="coupon",
-    name="Coupon",
+    name="Cupom",
     blueprint=bp,
-    menu=MenuItem(label="Coupon", endpoint="coupon.page", order=50),
+    menu=MenuItem(label="Cupom", endpoint="coupon.page", order=50),
     slots=[SlotContribution(slot="CART_SUMMARY", renderer=cart_summary_field)],
 )
