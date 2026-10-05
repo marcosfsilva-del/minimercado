@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.models import InventoryMovement, Order, OrderItem, Product
 
+
 def list_products(
     session: Session,
     sort_by: str = "name",
