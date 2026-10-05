@@ -3,9 +3,20 @@ from sqlalchemy.orm import Session
 
 from app.core.models import InventoryMovement, Order, OrderItem, Product
 
+def list_products(
+    session: Session,
+    sort_by: str = "name",
+    descending: bool = False,
+) -> list[Product]:
+    if sort_by == "price":
+        order_column = Product.price
+    else:
+        order_column = Product.name
 
-def list_products(session: Session) -> list[Product]:
-    return list(session.scalars(select(Product).order_by(Product.name)))
+    if descending:
+        order_column = order_column.desc()
+
+    return list(session.scalars(select(Product).order_by(order_column)))
 
 
 def list_orders(session: Session) -> list[Order]:
