@@ -4,8 +4,17 @@ from sqlalchemy.orm import Session
 from app.core.models import InventoryMovement, Order, OrderItem, Product
 
 
-def list_products(session: Session) -> list[Product]:
-    return list(session.scalars(select(Product).order_by(Product.name)))
+def list_products(
+    session: Session,
+    min_price: float | None = None,
+    max_price: float | None = None,
+) -> list[Product]:
+    query = select(Product)
+    if min_price is not None:
+        query = query.where(Product.price >= min_price)
+    if max_price is not None:
+        query = query.where(Product.price <= max_price)
+    return list(session.scalars(query.order_by(Product.name)))
 
 
 def list_orders(session: Session) -> list[Order]:

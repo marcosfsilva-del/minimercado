@@ -6,6 +6,14 @@
     <h2>Catálogo</h2>
     <p>Produtos iniciais para as features da turma evoluírem.</p>
   </div>
+  <form method="get" class="toolbar">
+    <label for="min_price">Preço mínimo</label>
+    <input id="min_price" name="min_price" type="number" step="0.01" min="0" value="{{ min_price }}" />
+    <label for="max_price">Preço máximo</label>
+    <input id="max_price" name="max_price" type="number" step="0.01" min="0" value="{{ max_price }}" />
+    <button type="submit">Aplicar filtro</button>
+    <a href="{{ url_for('web.catalog') }}">Limpar filtro</a>
+  </form>
   <div class="toolbar">
     {% for slot in slot_renderers("PRODUCT_LIST_TOOLBAR") %}
       {{ slot.renderer(products=products)|safe }}

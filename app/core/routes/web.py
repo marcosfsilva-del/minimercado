@@ -6,6 +6,15 @@ from app.core.services.market_service import create_order, list_orders, list_pro
 web_bp = Blueprint("web", __name__)
 
 
+def _parse_price(value: str | None) -> float | None:
+    if value in (None, ""):
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
 def _cart() -> dict[str, int]:
     return session.setdefault("cart", {})
 
@@ -23,9 +32,19 @@ def _cart_items(products):
 
 @web_bp.get("/")
 def catalog():
+    min_price_input = request.args.get("min_price", "")
+    max_price_input = request.args.get("max_price", "")
+    min_price = _parse_price(min_price_input)
+    max_price = _parse_price(max_price_input)
+
     with session_scope() as db:
-        products = list_products(db)
-    return render_template("catalog.html", products=products)
+        products = list_products(db, min_price=min_price, max_price=max_price)
+    return render_template(
+        "catalog.html",
+        products=products,
+        min_price=min_price_input,
+        max_price=max_price_input,
+    )
 
 
 @web_bp.post("/cart/add/<int:product_id>")
