@@ -1,7 +1,12 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
 from app.core.database import session_scope
-from app.core.services.market_service import create_order, list_orders, list_products
+from app.core.services.market_service import (
+    create_order,
+    filter_products_by_price,
+    list_orders,
+    list_products,
+)
 
 web_bp = Blueprint("web", __name__)
 
@@ -23,9 +28,21 @@ def _cart_items(products):
 
 @web_bp.get("/")
 def catalog():
+    min_price = request.args.get("min_price", type=float)
+    max_price = request.args.get("max_price", type=float)
+
     with session_scope() as db:
-        products = list_products(db)
-    return render_template("catalog.html", products=products)
+        if min_price is not None or max_price is not None:
+            products = filter_products_by_price(db, min_price, max_price)
+        else:
+            products = list_products(db)
+
+    return render_template(
+        "catalog.html",
+        products=products,
+        min_price=min_price,
+        max_price=max_price,
+    )
 
 
 @web_bp.post("/cart/add/<int:product_id>")
