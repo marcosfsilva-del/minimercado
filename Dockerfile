@@ -1,18 +1,17 @@
 # syntax=docker/dockerfile:1.7
 # ==========================================
-# Estágio 1: Builder (Compilação & Dependências)
+# Estágio 1: Builder (Compilação e Resolução)
 # ==========================================
 FROM python:3.13-slim AS builder
 
 WORKDIR /app
 
-# Otimizações de compilação e isolamento
 ENV PIP_NO_CACHE_DIR=0 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-# Instala toolchain de compilação para pacotes C/Rust com limpeza imediata
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Instala ferramentas essenciais com patch de segurança no builder
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
     && rm -rf /var/lib/apt/lists/*
@@ -21,20 +20,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# BuildKit Cache Mount: downloads e builds de wheels são cacheados entre builds
 COPY requirements.txt ./
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
+# Remove setuptools e pip do virtualenv de produção se não forem usados em runtime
+# (Isso elimina alertas de vulnerabilidades de dependências de empacotamento)
+RUN pip uninstall -y pip setuptools wheel 2>/dev/null || true
+
 # ==========================================
-# Estágio 2: Runtime Final (Minimal & Hardened)
+# Estágio 2: Runtime Final (Hardened & Scanned)
 # ==========================================
 FROM python:3.13-slim AS runner
 
 WORKDIR /app
 
-# Ativação do JIT (introduzido no Python 3.13) e flags de produção
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=0 \
@@ -42,36 +43,39 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PORT=3000 \
     DATABASE_URL="sqlite:////app/data/devops_market.db"
 
-# Dependências mínimas de runtime (curl para o healthcheck nativo)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# 1. Aplica patches de segurança do Debian para zerar CVEs de OS
+# 2. Limpa todos os caches de pacotes e documentações residuais
+# 3. Remove permissões SUID/SGID para mitigar escalonamento de privilégios
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+           /usr/share/doc /usr/share/man /usr/share/locale && \
+    find / -xdev -perm /6000 -type f -exec chmod a-s {} + 2>/dev/null || true
 
-# Cria usuário não-root com UID/GID estático
+# Criação do usuário estrito não-root
 RUN groupadd -g 10001 appgroup && \
     useradd -u 10001 -g appgroup -s /bin/sh -d /app appuser && \
     mkdir -p /app/data && \
     chown -R appuser:appgroup /app
 
-# Copia dependências pré-construídas
+# Copia runtime limpo do virtualenv
 COPY --from=builder --chown=appuser:appgroup /opt/venv /opt/venv
 
-# Copia código da aplicação
+# Copia os fontes do projeto
 COPY --chown=appuser:appgroup . .
 
-# Compila bytecode (.pyc) antecipadamente com otimização (elimina asserts desnecessários em prod)
+# Pré-compilação do bytecode com nível de otimização de produção
 RUN python -m compileall -b -q -o 1 app scripts tasks.py
 
-# Scripts de inicialização
 RUN chmod +x docker-entrypoint.sh
 
 USER appuser
 
 EXPOSE 3000
 
-# Healthcheck nativo para orquestradores (Swarm / K8s / Compose)
+# Healthcheck 100% nativo em Python (sem depender de curl, wget ou bibliotecas C externas)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:${PORT}/health || exit 1
+    CMD python -c "import urllib.request, os, sys; sys.exit(0 if urllib.request.urlopen(f'http://localhost:{os.environ.get(\"PORT\", 3000)}/health', timeout=2).getcode() == 200 else 1)"
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["python", "-m", "app.core.server"]
