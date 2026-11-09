@@ -52,7 +52,6 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     needs: test
- 
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
@@ -67,3 +66,22 @@ jobs:
  
       - name: Build com compileall
         run: python -m compileall -q app scripts
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Fazer checkout github
+        uses: actions/checkout@v4
+
+      - name: Gerar imagem docker
+        run: docker build -t minimercado:1.0 .
+
+      - name: Checar vulnerabilidade
+        uses: aquasecurity/trivy-action@0.36.0
+        with:
+          scan-type: image
+          image-ref: minimercado:1.0
+          severity: HIGH,CRITICAL
+          exit-code: '1'
