@@ -3,7 +3,7 @@ name: Pipeline Cupom - Luisa
 on:
   push:
     branches:
-      - "feature/**"
+      - "ref/**"
 
 jobs:
   lint:
