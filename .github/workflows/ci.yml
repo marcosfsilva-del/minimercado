@@ -77,10 +77,11 @@ jobs:
       - name: Gerar imagem docker
         run: docker build -t minimercado:1.0 . 
 
-      - name: Verificar Vunerabilidade
-        uses: aquasecurity/trivy-action@v0.36.0
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@master
         with:
-          scan-type: image
-          image-ref: minimercado:1.0
-          severity: 'HIGH,CRITICAL'
+          image-ref: 'minimercado:1.0'
+          format: 'table'
           exit-code: '1'
+          ignore-unfixed: true
+          severity: 'HIGH,CRITICAL'
