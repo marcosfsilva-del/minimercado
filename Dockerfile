@@ -13,6 +13,8 @@ WORKDIR /app
 ENV PORT=3000
 ENV DATABASE_URL=sqlite:///data/devops_market.db
 
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /install /usr/local
 COPY . .
 
