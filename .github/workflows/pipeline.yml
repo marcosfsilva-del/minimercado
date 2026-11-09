@@ -65,6 +65,7 @@ jobs:
  
       - name: Build com compileall
         run: python -m compileall -q app scripts
+
   
  release:
     name: Release
