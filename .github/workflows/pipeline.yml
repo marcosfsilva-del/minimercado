@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: "3.12"
  
-      - name: Instalar depend├¬ncias
+      - name: Instalar dependências
         run: python -m pip install -r requirements-dev.txt
  
       - name: Lint com Ruff
@@ -32,7 +32,7 @@ jobs:
     needs: lint
  
     steps:
-      - name: Baixar c├│digo
+      - name: Baixar código
         uses: actions/checkout@v4
  
       - name: Configurar Python
@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: "3.12"
  
-      - name: Instalar depend├¬ncias
+      - name: Instalar dependências
         run: python -m pip install -r requirements-dev.txt
  
       - name: Testes com Pytest
@@ -53,7 +53,7 @@ jobs:
     needs: test
  
     steps:
-      - name: Baixar c├│digo
+      - name: Baixar código
         uses: actions/checkout@v4
  
       - name: Configurar Python
@@ -61,8 +61,19 @@ jobs:
         with:
           python-version: "3.12"
  
-      - name: Instalar depend├¬ncias
+      - name: Instalar dependências
         run: python -m pip install -r requirements-dev.txt
+
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: build
  
-      - name: Build com compileall
-        run: python -m compileall -q app scripts
+    steps:
+      - name: Fazer checkout github
+        uses: actions/checkout@v4
+ 
+      - name: Gerar imagem docker
+        run: docker build -t minimercado:1.0 .
+ 
