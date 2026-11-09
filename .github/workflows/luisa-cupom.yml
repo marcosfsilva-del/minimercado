@@ -48,6 +48,4 @@ jobs:
       - name: Gerar imagem docker 
         run: docker build -t minimercado:1.0 .
         
-      - name: Gerar imagem docker
-        run: docker build -t minimercado:1.0 .
-
+  
