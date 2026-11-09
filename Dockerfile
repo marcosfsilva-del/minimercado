@@ -1,13 +1,13 @@
-FROM python:3.12-slim AS builder
+ARG PYTHON_VERSION=3.14
+
+FROM python:${PYTHON_VERSION}-slim AS builder
 
 WORKDIR /app
-COPY requirements-dev.txt requirements.txt ./
-RUN python -m pip install --upgrade pip && python -m pip install --prefix=/install -r requirements.txt
+COPY requirements.txt ./
+RUN python -m pip install --upgrade pip \
+    && python -m pip install --prefix=/install -r requirements.txt
 
-COPY . .
-RUN python -m compileall -q app scripts tasks.py
-
-FROM python:3.12-slim
+FROM python:${PYTHON_VERSION}-slim
 
 WORKDIR /app
 ENV PORT=3000
