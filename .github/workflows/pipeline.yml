@@ -66,3 +66,16 @@ jobs:
  
       - name: Build com compileall
         run: python -m compileall -q app scripts
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fazer checkout github
+        uses: actions/checkout@v4
+        
+      - name: Gerar imagem docker 
+        run: docker build -t minimercado:1.0 .
+        
+      - name: Gerar imagem docker
+        run: docker build -t minimercado:1.0 .
