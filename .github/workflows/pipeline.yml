@@ -94,7 +94,7 @@ jobs:
           password: ${{secrets.DOCKERHUB_TOKEN_LUIS}}
 
       - name: Rotular imagem
-        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB.USERNAME.LUIS}}/minimercado:1.0
+        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_LUIS}}/minimercado:1.0
 
       - name: Push to Docker
         run: docker push ${{secrets.DOCKERHUB_USERNAME_LUIS}}/minimercado:1.0
