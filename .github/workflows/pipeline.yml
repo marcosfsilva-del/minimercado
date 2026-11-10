@@ -76,7 +76,7 @@ jobs:
         run: docker build -t minimercado:1.0 .
 
       - name: Verificar Vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           image-ref: 'minimercado:1.0'
           format: 'table'
