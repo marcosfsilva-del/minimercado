@@ -38,34 +38,34 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - run: python tasks.py build
 
-  release:
-    name: Release
-    runs-on: ubuntu-latest
-    needs: build
- 
-    steps:
-      - name: Fazer checkout github
-        uses: actions/checkout@v4
- 
-      - name: Gerar imagem docker
-        run: docker build -t minimercado:1.0 .
- 
-      - name: Verificiar Vulnerabilidades
-        uses: aquasecurity/trivy-action@v0.26.0
-        with:
-         scan-type: image
-         image-ref: minimercado:1.0
-         severity: "HIGH,CRITICAL"
-         exit-code: '0'
-
-      - name: Login no dockerhub
-        uses: docker/login-action@v3
-        with:
-          username: ${{secrets.DOCKERHUB_USERNAME_LUISACARVALHO06}}
-          password: ${{secrets.DOCKERHUB_TOKEN_LUISACARVALHO06}}    
-
-      - name: Rotular Imagem 
-        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:1.0
-          
-      - name: Push to Docker
-        run: docker push ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:1.0  
+   release:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+        - name: Fazer checkout github
+          uses: actions/checkout@v4
+  
+        - name: Gerar imagem docker 
+          run: docker build -t minimercado:1.0 .
+  
+        - name: Verificar Vulnerabiliades 
+          uses: aquasecurity/trivy-action@v0.36.0
+          with:
+            scan-type: image
+            image-ref: minimercado:1.0
+            severity: "HIGH,CRITICAL"
+            exit-code: '1'
+    
+            exit-code: '0'
+  
+        - name: Login no dockerhub
+          uses: docker/login-action@v3
+          with:
+            username: ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}
+            password: ${{secrets.DOCKERHUB_TOKEN_PROFESSOR}}    
+  
+        - name: Rotular Imagem 
+          run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:1.0
+            
+        - name: Push to Docker
+          run: docker push ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:1.0  
