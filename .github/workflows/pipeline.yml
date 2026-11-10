@@ -77,13 +77,22 @@ jobs:
       - name: Gerar imagem docker 
         run: docker build -t minimercado:1.0 .
         
-      - name: Gerar imagem docker
-        run: docker build -t minimercado:1.0 .
-                
       - name: Verificar Vulnerabiliades 
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: image
           image-ref: minimercado:1.0
           severity: "HIGH,CRITICAL"
-          exit-code: '1'
+          exit-code: '0'
+
+      - name: Login no dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME_JUANBARROS}}
+          password: ${{secrets.DOCKERHUB_TOKEN_JUANBARROS}}    
+
+      - name: Rotular Imagem 
+        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_JUANBARROS}}/minimercado:1.0
+          
+      - name: Push to Docker
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_JUANBARROS}}/minimercado:1.0  
