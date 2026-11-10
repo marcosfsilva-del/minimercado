@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-title">
+  <div>
+    <p class="eyebrow">Compra finalizada</p>
+    <h2>Pedido realizado com sucesso!</h2>
+    <p>Seu pedido foi registrado em nosso sistema.</p>
+  </div>
+</section>
+
+<article class="panel narrow stack">
+  <div>
+    <h3>Confirmação do pedido</h3>
+    <p>Seu número de pedido é:</p>
+    <p class="price">#{{ order.id }}</p>
+  </div>
+
+  <div class="summary-line">
+    <span>Valor total da compra</span>
+    <strong class="total">{{ order.total|brl }}</strong>
+  </div>
+
+  <div class="toolbar">
+    <a class="button-link" href="{{ url_for('web.catalog') }}">
+      Voltar ao catálogo
+    </a>
+
+    <a class="button-link" href="{{ url_for('web.orders') }}">
+      Ver meus pedidos
+    </a>
+  </div>
+</article>
+{% endblock %}
