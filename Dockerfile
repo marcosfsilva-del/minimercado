@@ -1,4 +1,3 @@
-dockerfile
 # Estágio 1: construção
 FROM python:3.15-slim AS builder
 
