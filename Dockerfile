@@ -34,4 +34,4 @@ RUN mkdir -p data
 EXPOSE 3000
 
 CMD ["sh", "-c", "python tasks.py db-seed && python -m app.core.server"]
-```
+
