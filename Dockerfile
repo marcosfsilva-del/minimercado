@@ -18,5 +18,13 @@ COPY . .
 
 RUN mkdir -p data
 
+FROM python:3.12-slim
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
 EXPOSE 3000
 CMD ["sh", "-c", "python tasks.py db-seed && python -m app.core.server"]
