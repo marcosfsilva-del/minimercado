@@ -5,6 +5,9 @@ COPY requirements-dev.txt requirements.txt ./
 RUN python -m pip install --upgrade pip && python -m pip install --prefix=/install -r requirements.txt
 
 COPY . .
+
+RUN ls -la /app && ls -la /app/tasks.py
+
 RUN python -m compileall -q app scripts tasks.py
 
 FROM python:3.12-slim
@@ -21,12 +24,6 @@ COPY --from=builder /install /usr/local
 COPY . .
 
 RUN mkdir -p data
-
-FROM python:3.12-slim
-
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
