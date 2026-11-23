@@ -64,7 +64,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN_PROFESSOR }}
 
       - name: Rotular Imagem
-        run: docker tag minimercado:1.0 ${{ secrets.DOCKERHUB_USERNAME_PROFESSOR }}/minimercado:1.0
+        run: docker tag minimercado:1.0 luisacarvalho06/minimercado:1.0
 
       - name: Push to Docker
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME_PROFESSOR }}/minimercado:1.0
+        run: docker push luisacarvalho06/minimercado:1.0
