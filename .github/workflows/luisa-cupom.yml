@@ -60,7 +60,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: luisacarvalho06
-          password: ${{ secrets.DOCKERHUB_TOKEN_LUISACARVALH006 }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_LUISACARVALHO06 }}
 
       - name: Rotular Imagem
         run: docker tag minimercado:1.0 luisacarvalho06/minimercado:1.0
