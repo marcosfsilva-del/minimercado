@@ -1,4 +1,3 @@
-
 name: Pipeline Cupom - Luisa
 
 on:
@@ -57,14 +56,14 @@ jobs:
           severity: "HIGH,CRITICAL"
           exit-code: '0'
 
-      - name: Login no dockerhub
+      - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME_PROFESSOR }}
-          password: ${{ secrets.DOCKERHUB_TOKEN_PROFESSOR }}
+          username: luisacarvalho06
+          password: ${{ secrets.DOCKERHUB_TOKEN_LUISACARVALH006 }}
 
       - name: Rotular Imagem
         run: docker tag minimercado:1.0 luisacarvalho06/minimercado:1.0
 
-      - name: Push to Docker
+      - name: Push to Docker Hub
         run: docker push luisacarvalho06/minimercado:1.0
