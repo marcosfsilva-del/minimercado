@@ -68,7 +68,3 @@ jobs:
 
       - name: Push to Docker
         run: docker push ${{ secrets.DOCKERHUB_USERNAME_PROFESSOR }}/minimercado:1.0
-
-            
-        - name: Push to Docker
-          run: docker push ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:1.0  
