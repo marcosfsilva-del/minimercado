@@ -1,5 +1,6 @@
+
 # Estágio 1: construção
-FROM python:3.15-slim AS builder
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
@@ -14,7 +15,7 @@ RUN python -m compileall -q app scripts tasks.py
 
 
 # Estágio 2: produção
-FROM python:3.15-slim
+FROM python:3.12-slim
 
 # Atualizar pacotes do sistema operacional
 RUN apt-get update && \
@@ -34,4 +35,3 @@ RUN mkdir -p data
 EXPOSE 3000
 
 CMD ["sh", "-c", "python tasks.py db-seed && python -m app.core.server"]
-
