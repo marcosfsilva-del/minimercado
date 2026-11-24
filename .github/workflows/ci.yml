@@ -86,7 +86,7 @@ jobs:
           ignore-unfixed: true
           severity: 'HIGH,CRITICAL'
 
-   deploy:
+  deploy:
     name: deploy
     runs-on: ubuntu-latest
     needs: release
