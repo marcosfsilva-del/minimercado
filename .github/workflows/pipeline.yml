@@ -94,10 +94,10 @@ jobs:
           password: ${{secrets.DOCKERHUB_TOKEN_JOAOVITORCAETANO}}
 
       - name: Rotular Imagem
-        run: docker tag minimercado:1.0  ${{secrets.DOCKERHUB_USERNAME_JOAOVITORCAETANO}}/minimercado:1.0
+        run: docker tag minimercado:1.0  ${{secrets.DOCKERHUB_USERNAME_JOAOVITORCAETANO}}/minimercado:${GITHUB_SHA::7}
 
       - name: Push to docker
-        run: docker push ${{secrets.DOCKERHUB_USERNAME_JOAOVITORCAETANO}}/minimercado:1.0
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_JOAOVITORCAETANO}}/minimercado:${GITHUB_SHA::7}
 
   deploy:
     name: deploy
