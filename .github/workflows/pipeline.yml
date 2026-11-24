@@ -92,11 +92,17 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME_GSLS77}}
           password: ${{secrets.DOCKERHUB_TOKEN_GSLS77}}
       
-      - name: Rotular Imagem
+      - name: Rotular Imagem base
         run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_GSLS77}}/minimercado:${GITHUB_SHA::7}
-        
-      - name: Push to Docker
+      
+      - name: Rotular Imagem Latest
+        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_GSLS77}}/minimercado:latest
+  
+      - name: Push to Docker imagem base
         run: docker push ${{secrets.DOCKERHUB_USERNAME_GSLS77}}/minimercado:${GITHUB_SHA::7}
+
+      - name: Push to Docker imagem latest
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_GSLS77}}/minimercado:latest 
   
   deploy:
     needs: release
