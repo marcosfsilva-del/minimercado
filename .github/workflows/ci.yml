@@ -92,5 +92,5 @@ jobs:
     needs: release
     steps:
       - name: Deploy no Render
-        run: curl --fall --silent --show-error --request POST "${{ secrets.DEPLOY_HOOK_URL_MERKETZ}}"
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_MERKETZ}}"
 
