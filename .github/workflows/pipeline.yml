@@ -65,3 +65,11 @@ jobs:
 
       - name: Push to docker
         run: docker push ${{secrets.DOCKERHUB_USERNAME_JOAONICOLAU}}/minimercado:1.0
+
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy no Render
+        run: curl --fail --silent --show-error --request POST "${{secrets.DEPLOY_HOOK_URL_JOAONICOLAU}}"
+
