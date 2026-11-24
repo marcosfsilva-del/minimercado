@@ -82,18 +82,24 @@ jobs:
       - name: Login no dockerhub
         uses: docker/login-action@v3
         with:
-          username: ${{secrets. DOCKERHUB_USERNAME_YAGOLOPES01}}
-          password: ${{secrets. DOCKERHUB_TOKEN_YAGOLOPES01}}
+          username: ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}
+          password: ${{secrets.DOCKERHUB_TOKEN_PROFESSOR}}    
 
-      - name: Rotular imagem
-        run: docker tag minimercado:1.0 ${{secrets. DOCKERHUB_USERNAME_YAGOLOPES01}}/minimercado:1.0
-
-      - name: Push to Docker
-        run: docker push ${{secrets. DOCKERHUB_USERNAME_YAGOLOPES01}}/minimercado:1.0
+      - name: Rotular Imagem base
+        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_YAGOLOPES01}}/minimercado:${GITHUB_SHA::7}
+        
+      - name: Rotular Imagem Latest
+        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_YAGOLOPES01}}/minimercado:latest
+          
+      - name: Push to Docker imagem base
+        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_YAGOLOPES01}}/minimercado:${GITHUB_SHA::7}
+        
+      - name: Push to Docker imagem latest
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_YAGOLOPES01}}/minimercado:latest
 
   deploy:
     needs: release
     runs-on: ubuntu-latest
     steps:
       - name: Deploy no Render
-        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_YAGOLOPES01}}"
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_YAGOLOPES01 }}" --data-urlencode "imgURL=docker.io/${{ secrets.DOCKERHUB_USERNAME_YAGOLOPES01 }}/minimercado:latest"
