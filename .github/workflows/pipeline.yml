@@ -100,4 +100,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy no Render
-        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_RAFAELA}}"
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_RAFAELA}}"  --data-urlencode "imgURL=docker.io/${{secrets.DOCKERHUB_USERNAME_RAFAELA}}/minimercado:${GITHUB_SHA::7}"
