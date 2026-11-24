@@ -64,11 +64,13 @@ jobs:
 
       - name: Rotular Imagem base
         run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:${GITHUB_SHA::7}
+        
       - name: Rotular Imagem Latest
         run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:latest
           
       - name: Push to Docker imagem base
         run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:${GITHUB_SHA::7}
+        
       - name: Push to Docker imagem latest
         run: docker push ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:latest
 
