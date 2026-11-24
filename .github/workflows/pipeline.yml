@@ -97,3 +97,13 @@ jobs:
         
       - name: Push to Docker
         run: docker push ${{secrets.DOCKERHUB_USERNAME_GSLS77}}/minimercado:1.0
+  
+  deploy:
+    needs: release
+    runs-on: ubuntu-latest
+   
+    steps:
+      - name: Deploy no Render
+        run: curl --show-error --request POST "${{ secrets.DEPLOY_HOOK_URL_GSLS77 }}"
+          
+          
