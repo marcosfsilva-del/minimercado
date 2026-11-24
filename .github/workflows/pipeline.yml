@@ -100,8 +100,8 @@ jobs:
         run: docker push ${{secrets.DOCKERHUB_USERNAME_LUIS}}/minimercado:${GITHUB_SHA::7}
 
   deploy:
-      needs: release
-      runs-on: ubuntu-latest
-      steps:
-        - name: Deploy no Render
-          run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_LUIS}}" --data-urlencode "imgURL=docker.io/${{secrets.DOCKERHUB_USERNAME_LUIS}}/minimercado:${GITHUB_SHA::7}"
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy no Render
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_LUIS}}" --data-urlencode "imgURL=docker.io/${{secrets.DOCKERHUB_USERNAME_LUIS}}/minimercado:${GITHUB_SHA::7}"
