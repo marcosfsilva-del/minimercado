@@ -83,15 +83,16 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN_JOAOVICTORRR }}
 
       - name: Rotular Imagem
-        run: docker tag minimercado:1.0  ${{secrets.DOCKERHUB_USERNAME_JOAOVICTORRR}}/minimercado:${GITHUB_SHA::7}
+        run: docker tag minimercado-nomealuno:1.0 ${{ secrets.DOCKERHUB_USERNAME_JOAOVICTORRR }}/minimercado:${{ github.sha }}
 
-      - name: Push to docker
-        run: docker push ${{secrets.DOCKERHUB_USERNAME_JOAOVICTORRR}}/minimercado:${GITHUB_SHA::7}
-      deploy:
+      - name: Push to Docker
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME_JOAOVICTORRR }}/minimercado:${{ github.sha }}
+
+  deploy:
     needs: release
     runs-on: ubuntu-latest
-   
     steps:
       - name: Deploy no Render
-        run: curl --show-error --request POST "${{ secrets.DEPLOY_HOOK_URL_JOAOVICTORRR}}" --data-urlencode "imgURL=docker.io/${{secrets.DOCKERHUB_USERNAME_JOAOVICTORRR}}/minimercado:${GITHUB_SHA::7}"
-          
+        run: |
+          curl --fail --show-error --request POST "${{ secrets.DEPLOY_HOOK_URL_JOAOVICTORRR }}" \
+          --data-urlencode "imgURL=docker.io/${{ secrets.DOCKERHUB_USERNAME_JOAOVICTORRR }}/minimercado:${{ github.sha }}"
