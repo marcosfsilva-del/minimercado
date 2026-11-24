@@ -103,7 +103,7 @@ jobs:
        runs-on: ubuntu-latest
       steps:
       - name: Deploy no Render
-        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_PROFESSOR}}"
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_VINIMS22}}"
 
         
 
