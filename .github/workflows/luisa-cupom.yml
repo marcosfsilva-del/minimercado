@@ -62,18 +62,17 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}
           password: ${{secrets.DOCKERHUB_TOKEN_PROFESSOR}}    
 
-      - name: Rotular Imagem 
+      - name: Rotular Imagem base
         run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:${GITHUB_SHA::7}
+      - name: Rotular Imagem Latest
+        run: docker tag minimercado:1.0 ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:latest
           
       - name: Push to Docker
-        run: docker push ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:${GITHUB_SHA::7}  
+        run: docker push ${{secrets.DOCKERHUB_USERNAME_PROFESSOR}}/minimercado:latest
 
   deploy:
     needs: release
     runs-on: ubuntu-latest
     steps:
       - name: Deploy no Render
-        shell: bash
-        run: |
-          curl --request POST "${{ secrets.DEPLOY_HOOK_URL_PROFESSOR }}" \
-            --data-urlencode "imgURL=docker.io/${{ secrets.DOCKERHUB_USERNAME_PROFESSOR }}/minimercado:${GITHUB_SHA::7}"
+        run: curl --request POST "${{ secrets.DEPLOY_HOOK_URL_PROFESSOR }}" --data-urlencode "imgURL=docker.io/${{ secrets.DOCKERHUB_USERNAME_PROFESSOR }}/minimercado:latest"
